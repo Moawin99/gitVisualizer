@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/user"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 func scanGitFolders(folders []string, folder string) []string {
@@ -27,7 +29,7 @@ func scanGitFolders(folders []string, folder string) []string {
 			path = folder + "/" + file.Name()
 			if file.Name() == ".git" {
 				path = strings.TrimSuffix(path, "/.git")
-				fmt.Println(path)
+				// fmt.Println(path)
 				folders = append(folders, path)
 				continue
 			}
@@ -54,7 +56,7 @@ func getDotFilePath() string {
 }
 
 func openFile(filePath string) *os.File {
-	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0755)
+	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_RDWR, 0644)
 	if err != nil {
 		if os.IsNotExist(err) {
 			_, err = os.Create(filePath)
@@ -107,6 +109,7 @@ func dumpStringsSliceToFile(repos []string, filePath string) {
 
 func addNewSliceElementsToFile(filePath string, newElements []string) {
 	existingRepos := parseFileLinesToSlice(filePath)
+	fmt.Println("REPOS", existingRepos)
 	repos := joinSlices(existingRepos, newElements)
 	dumpStringsSliceToFile(repos, filePath)
 }
@@ -123,14 +126,22 @@ func stats(email string) {
 	fmt.Println("Stats")
 }
 
+func loadEnv() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
-	var folder string
+	loadEnv()
+	folder := os.Getenv("GIT_FOLDER")
 	var email string
 
-	flag.StringVar(&folder, "add", "", "add a new folder to scan for git repositories")
+	// flag.StringVar(&folder, "add", "", "add a new folder to scan for git repositories")
 	flag.StringVar(&email, "email", "your@email.com", "the email to scan")
 
-	flag.Parse()
+	// flag.Parse()
 	if folder != "" {
 		scan(folder)
 		return
