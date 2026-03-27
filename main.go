@@ -105,6 +105,7 @@ func parseFileLinesToSlice(filePath string) []string {
 func dumpStringsSliceToFile(repos []string, filePath string) {
 	content := strings.Join(repos, "\n")
 	os.WriteFile(filePath, []byte(content), 0755)
+	fmt.Println("File updated successfully")
 }
 
 func addNewSliceElementsToFile(filePath string, newElements []string) {
@@ -119,7 +120,7 @@ func scan(folder string) {
 	repositories := recursiveScanFolder(folder)
 	filePath := getDotFilePath()
 	addNewSliceElementsToFile(filePath, repositories)
-	fmt.Printf("\n\nSuccessfully added %d repositories to the file\n")
+	fmt.Printf("\n\nSuccessfully added %d repositories to the file\n", len(repositories))
 }
 
 func stats(email string) {
@@ -136,13 +137,13 @@ func loadEnv() {
 func main() {
 	loadEnv()
 	folder := os.Getenv("GIT_FOLDER")
-	var email string
+	email := os.Getenv("EMAIL")
 
-	// flag.StringVar(&folder, "add", "", "add a new folder to scan for git repositories")
+	addFolderFlag := flag.Bool("add", false, "add a new folder to scan for git repositories")
 	flag.StringVar(&email, "email", "your@email.com", "the email to scan")
 
-	// flag.Parse()
-	if folder != "" {
+	flag.Parse()
+	if *addFolderFlag != false {
 		scan(folder)
 		return
 	}
