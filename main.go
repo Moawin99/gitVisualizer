@@ -11,7 +11,6 @@ func main() {
 	email := os.Getenv("EMAIL")
 
 	addFolderFlag := flag.Bool("add", false, "add a new folder to scan for git repositories")
-	// flag.StringVar(&email, "email", "your@email.com", "the email to scan")
 
 	flag.Parse()
 	if *addFolderFlag != false {

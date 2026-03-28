@@ -131,10 +131,10 @@ func printCells(cols map[int]column) {
 					}
 				}
 			}
+			printCell(0, false)
 		}
-		printCell(0, false)
+		fmt.Printf("\n")
 	}
-	fmt.Printf("\n")
 }
 
 func printMonths() {
@@ -148,8 +148,8 @@ func printMonths() {
 		} else {
 			fmt.Printf("    ")
 		}
-		week = week.Add(time.Hour * 24 * 7)
-		if week.After(getBeginningOfDay(time.Now())) {
+		week = week.Add(7 * time.Hour * 24)
+		if week.After(time.Now()) {
 			break
 		}
 	}
