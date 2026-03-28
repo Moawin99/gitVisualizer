@@ -1,3 +1,3 @@
 # gitVisualizer
 
-![image](/Users/markmoawad/Downloads/gitViz)
+![image](/Users/markmoawad/Downloads/gitViz.png)
